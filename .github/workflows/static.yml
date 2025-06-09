@@ -1,19 +1,31 @@
+name: 🚀 Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Verifica index.html
-        run: test -f public/index.html
+      - name: Verifica se docs/index.html existe
+        run: test -f docs/index.html
 
   pages:
     needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Prepara artefato
+      - name: Prepara artefato para Pages
         uses: actions/upload-pages-artifact@v1
         with:
-          path: public      
-      - name: Deploy Pages
+          path: docs
+      - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
