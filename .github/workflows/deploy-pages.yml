@@ -1,31 +1,28 @@
-name: 🚀 Deploy to GitHub Pages
-
+name: Deploy to GitHub Pages
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Verifica public/index.html
-        run: test -f public/index.html
-
   pages:
-    needs: check
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Prepara artefato
+
+      - name: Build site
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: public
-      - name: Deploy Pages
+          path: ./public
+
+      - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
